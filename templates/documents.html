@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document Processing Hub - Kongu Engineering College</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .main-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            box-shadow: 0 32px 64px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+            color: white;
+            padding: 20px 40px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 100%;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo {
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .logo-section h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin: 0 0 4px 0;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .logo-section p {
+            font-size: 0.95rem;
+            opacity: 0.9;
+            margin: 0;
+            font-weight: 400;
+        }
+
+        .user-section {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .user-info {
+            text-align: right;
+        }
+
+        .user-name {
+            font-weight: 600;
+            font-size: 1rem;
+            margin-bottom: 2px;
+        }
+
+        .user-email {
+            font-size: 0.85rem;
+            opacity: 0.8;
+        }
+
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            font-size: 0.9rem;
+            padding: 8px 12px;
+            border-radius: 6px;
+            transition: background 0.3s ease;
+        }
+
+        .nav-link:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .logout-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 8px 16px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-1px);
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #e5e7eb;
+        }
+
+        .tab {
+            padding: 12px 24px;
+            background: none;
+            border: none;
+            border-bottom: 3px solid transparent;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            color: #6b7280;
+            transition: all 0.3s ease;
+        }
+
+        .tab.active {
+            color: #4f46e5;
+            border-bottom-color: #4f46e5;
+        }
+
+        .tab:hover {
+            color: #4f46e5;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .upload-section {
+            background: #f8fafc;
+            border: 2px dashed #cbd5e1;
+            border-radius: 16px;
+            padding: 40px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .upload-section:hover {
+            border-color: #4f46e5;
+            background: #f1f5f9;
+        }
+
+        .upload-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+
+        .upload-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 10px;
+        }
+
+        .upload-description {
+            color: #64748b;
+            margin-bottom: 20px;
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        .upload-btn {
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .upload-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(79, 70, 229, 0.3);
+        }
+
+        .documents-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .document-card {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .document-card:hover {
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .document-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 15px;
+        }
+
+        .document-icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .document-title {
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 5px;
+            word-break: break-word;
+        }
+
+        .document-meta {
+            font-size: 0.85rem;
+            color: #64748b;
+            margin-bottom: 15px;
+        }
+
+        .document-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-small {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: #4f46e5;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #4338ca;
+        }
+
+        .btn-danger {
+            background: #ef4444;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #dc2626;
+        }
+
+        .qa-section {
+            margin-top: 30px;
+        }
+
+        .qa-form {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+            color: #374151;
+        }
+
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .qa-history {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+        }
+
+        .qa-item {
+            border-bottom: 1px solid #e5e7eb;
+            padding: 15px 0;
+        }
+
+        .qa-item:last-child {
+            border-bottom: none;
+        }
+
+        .question {
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 8px;
+        }
+
+        .answer {
+            color: #4b5563;
+            line-height: 1.6;
+        }
+
+        .qa-meta {
+            font-size: 0.85rem;
+            color: #64748b;
+            margin-top: 8px;
+        }
+
+        .syllabus-analysis {
+            background: #f0f9ff;
+            border: 1px solid #bae6fd;
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .syllabus-title {
+            font-weight: 600;
+            color: #0c4a6e;
+            margin-bottom: 15px;
+        }
+
+        .syllabus-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+        }
+
+        .syllabus-item {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #e0f2fe;
+        }
+
+        .syllabus-label {
+            font-weight: 600;
+            color: #0369a1;
+            margin-bottom: 5px;
+        }
+
+        .syllabus-value {
+            color: #475569;
+        }
+
+        .topics-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .topics-list li {
+            padding: 5px 0;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .topics-list li:last-child {
+            border-bottom: none;
+        }
+
+        .message {
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .success {
+            background: #d1fae5;
+            color: #065f46;
+            border: 1px solid #a7f3d0;
+        }
+
+        .error {
+            background: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #fecaca;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #64748b;
+        }
+
+        .empty-state-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            opacity: 0.5;
+        }
+
+        .empty-state-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .empty-state-description {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <div class="header">
+            <div class="header-content">
+                <div class="logo-section">
+                    <div class="logo">📚</div>
+                    <div>
+                        <h1>Document Processing Hub</h1>
+                        <p>Upload, analyze, and query your documents</p>
+                    </div>
+                </div>
+                <div class="user-section">
+                    <div class="user-info">
+                        <div class="user-name">{{ user.full_name or user.username }}</div>
+                        <div class="user-email">{{ user.email }}</div>
+                    </div>
+                    <a href="/home" class="nav-link">Chatbot</a>
+                    <a href="/profile" class="nav-link">Profile</a>
+                    <a href="/logout" class="logout-btn">Logout</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="content">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="message {{ category }}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            <div class="tabs">
+                <button class="tab active" onclick="showTab('upload')">📤 Upload Documents</button>
+                <button class="tab" onclick="showTab('qa')">❓ Document Q&A</button>
+                <button class="tab" onclick="showTab('syllabus')">📋 Syllabus Analysis</button>
+                <button class="tab" onclick="showTab('manage')">📁 Manage Documents</button>
+            </div>
+
+            <!-- Upload Tab -->
+            <div id="upload" class="tab-content active">
+                <div class="upload-section">
+                    <div class="upload-icon">📄</div>
+                    <div class="upload-title">Upload Documents</div>
+                    <div class="upload-description">
+                        Support for PDF, DOCX, TXT, and image files (JPG, PNG, TIFF)
+                    </div>
+                    <form method="POST" action="/upload_document" enctype="multipart/form-data">
+                        <input type="file" name="document" class="file-input" id="documentFile" accept=".pdf,.docx,.doc,.txt,.jpg,.jpeg,.png,.tiff" required>
+                        <input type="hidden" name="document_type" value="general">
+                        
+                        <!-- Primary button -->
+                        <button type="button" class="upload-btn" onclick="document.getElementById('documentFile').click(); return false;">
+                            Choose File
+                        </button>
+                        
+                        <!-- Alternative direct input -->
+                        <div style="margin-top: 15px;">
+                            <label style="color: #64748b; font-size: 0.9rem;">Or select file directly:</label><br>
+                            <input type="file" name="document_direct" id="documentFileDirect" accept=".pdf,.docx,.doc,.txt,.jpg,.jpeg,.png,.tiff" 
+                                   style="margin-top: 5px; border: 1px solid #d1d5db; padding: 5px; border-radius: 4px;">
+                        </div>
+                        
+                        <div id="fileName" style="margin-top: 10px; color: #4b5563;"></div>
+                        <button type="submit" class="upload-btn" style="margin-top: 20px; display: none;" id="submitBtn">
+                            Upload & Process
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Document Q&A Tab -->
+            <div id="qa" class="tab-content">
+                <div class="qa-section">
+                    <div class="qa-form">
+                        <h3>Ask Questions About Your Documents</h3>
+                        <form method="POST" action="/ask_document_question">
+                            <div class="form-group">
+                                <label for="qa_document">Select Document:</label>
+                                <select name="document_id" id="qa_document" required>
+                                    <option value="">Choose a document...</option>
+                                    {% for doc in documents %}
+                                    <option value="{{ doc.id }}">{{ doc.filename }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="question">Your Question:</label>
+                                <textarea name="question" placeholder="Ask anything about your document..." required></textarea>
+                            </div>
+                            <button type="submit" class="upload-btn">Ask Question</button>
+                        </form>
+                    </div>
+
+                    {% if qa_history %}
+                    <div class="qa-history">
+                        <h3>Question History</h3>
+                        {% for qa in qa_history %}
+                        <div class="qa-item">
+                            <div class="question">Q: {{ qa.question }}</div>
+                            <div class="answer">A: {{ qa.answer }}</div>
+                            <div class="qa-meta">Asked on {{ qa.timestamp.strftime('%B %d, %Y at %I:%M %p') }}</div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Syllabus Analysis Tab -->
+            <div id="syllabus" class="tab-content">
+                <div class="qa-form">
+                    <h3>Analyze Syllabus</h3>
+                    <p>Upload a syllabus document to extract course information, topics, and evaluation criteria.</p>
+                    <form method="POST" action="/upload_document" enctype="multipart/form-data">
+                        <input type="file" name="document" class="file-input" id="syllabusFile" accept=".pdf,.docx,.doc,.txt" required>
+                        <input type="hidden" name="document_type" value="syllabus">
+                        
+                        <!-- Primary button -->
+                        <button type="button" class="upload-btn" onclick="document.getElementById('syllabusFile').click(); return false;">
+                            Choose Syllabus File
+                        </button>
+                        
+                        <!-- Alternative direct input -->
+                        <div style="margin-top: 15px;">
+                            <label style="color: #64748b; font-size: 0.9rem;">Or select file directly:</label><br>
+                            <input type="file" name="document_direct" id="syllabusFileDirect" accept=".pdf,.docx,.doc,.txt" 
+                                   style="margin-top: 5px; border: 1px solid #d1d5db; padding: 5px; border-radius: 4px;">
+                        </div>
+                        
+                        <div id="syllabusFileName" style="margin-top: 10px; color: #4b5563;"></div>
+                        <button type="submit" class="upload-btn" style="margin-top: 20px; display: none;" id="syllabusSubmitBtn">
+                            Analyze Syllabus
+                        </button>
+                    </form>
+                </div>
+
+                {% if syllabus_analyses %}
+                <h3 style="margin-top: 30px;">Syllabus Analyses</h3>
+                {% for analysis in syllabus_analyses %}
+                <div class="syllabus-analysis">
+                    <div class="syllabus-title">{{ analysis.course_name or 'Course Analysis' }}</div>
+                    <div class="syllabus-grid">
+                        <div class="syllabus-item">
+                            <div class="syllabus-label">Course Code</div>
+                            <div class="syllabus-value">{{ analysis.course_code }}</div>
+                        </div>
+                        <div class="syllabus-item">
+                            <div class="syllabus-label">Credits</div>
+                            <div class="syllabus-value">{{ analysis.credits }}</div>
+                        </div>
+                        <div class="syllabus-item">
+                            <div class="syllabus-label">Topics Covered</div>
+                            <div class="syllabus-value">
+                                <ul class="topics-list">
+                                    {% for topic in analysis.topics[:5] %}
+                                    <li>{{ topic }}</li>
+                                    {% endfor %}
+                                    {% if analysis.topics|length > 5 %}
+                                    <li>... and {{ analysis.topics|length - 5 }} more topics</li>
+                                    {% endif %}
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="syllabus-item">
+                            <div class="syllabus-label">Evaluation</div>
+                            <div class="syllabus-value">
+                                {% for eval in analysis.evaluation[:2] %}
+                                <div>{{ eval }}</div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+                {% endif %}
+            </div>
+
+            <!-- Manage Documents Tab -->
+            <div id="manage" class="tab-content">
+                {% if documents %}
+                <div class="documents-grid">
+                    {% for doc in documents %}
+                    <div class="document-card">
+                        <div class="document-header">
+                            <div>
+                                <div class="document-icon">
+                                    {% if doc.file_type == 'pdf' %}📄
+                                    {% elif doc.file_type in ['docx', 'doc'] %}📝
+                                    {% elif doc.file_type == 'txt' %}📃
+                                    {% else %}🖼️{% endif %}
+                                </div>
+                                <div class="document-title">{{ doc.filename }}</div>
+                                <div class="document-meta">
+                                    Type: {{ doc.file_type.upper() }}<br>
+                                    Size: {{ "%.1f"|format(doc.file_size / 1024) }} KB<br>
+                                    Uploaded: {{ doc.upload_date.strftime('%b %d, %Y') }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="document-actions">
+                            <a href="/ask_document/{{ doc.id }}" class="btn-small btn-primary">Ask Question</a>
+                            <form method="POST" action="/delete_document/{{ doc.id }}" style="display: inline;" onsubmit="return confirm('Are you sure you want to delete this document?')">
+                                <button type="submit" class="btn-small btn-danger">Delete</button>
+                            </form>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="empty-state">
+                    <div class="empty-state-icon">📭</div>
+                    <div class="empty-state-title">No documents uploaded yet</div>
+                    <div class="empty-state-description">Upload your first document to get started with document processing and analysis.</div>
+                    <button class="upload-btn" onclick="showTab('upload')">Upload Document</button>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showTab(tabName) {
+            // Hide all tabs
+            const tabs = document.querySelectorAll('.tab-content');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            // Remove active class from all tab buttons
+            const tabButtons = document.querySelectorAll('.tab');
+            tabButtons.forEach(btn => btn.classList.remove('active'));
+            
+            // Show selected tab
+            document.getElementById(tabName).classList.add('active');
+            
+            // Add active class to clicked button
+            event.target.classList.add('active');
+        }
+
+        // File input handlers with better error handling
+        function setupFileInput(inputId, displayId, submitId, directInputId) {
+            const fileInput = document.getElementById(inputId);
+            const directFileInput = document.getElementById(directInputId);
+            const fileNameDisplay = document.getElementById(displayId);
+            const submitButton = document.getElementById(submitId);
+            
+            function handleFileSelect(fileName) {
+                fileNameDisplay.textContent = fileName ? `Selected: ${fileName}` : '';
+                submitButton.style.display = fileName ? 'inline-block' : 'none';
+            }
+            
+            if (fileInput && fileNameDisplay && submitButton) {
+                fileInput.addEventListener('change', function(e) {
+                    const fileName = e.target.files[0]?.name || '';
+                    handleFileSelect(fileName);
+                });
+            }
+            
+            if (directFileInput && fileNameDisplay && submitButton) {
+                directFileInput.addEventListener('change', function(e) {
+                    const fileName = e.target.files[0]?.name || '';
+                    handleFileSelect(fileName);
+                    // Also update the hidden input if needed
+                    if (fileInput && fileName) {
+                        fileInput.files = e.target.files;
+                    }
+                });
+            }
+        }
+
+        // Initialize file inputs when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            setupFileInput('documentFile', 'fileName', 'submitBtn', 'documentFileDirect');
+            setupFileInput('syllabusFile', 'syllabusFileName', 'syllabusSubmitBtn', 'syllabusFileDirect');
+        });
+
+        // Manual file click function as backup
+        function chooseFile(inputId) {
+            try {
+                document.getElementById(inputId).click();
+            } catch (error) {
+                console.error('Error opening file dialog:', error);
+                alert('Please try clicking the file input directly or refresh the page.');
+            }
+        }
+
+        // Auto-hide messages after 5 seconds
+        setTimeout(function() {
+            const messages = document.querySelectorAll('.message');
+            messages.forEach(function(msg) {
+                msg.style.display = 'none';
+            });
+        }, 5000);
+    </script>
+</body>
+</html>

@@ -1,0 +1,42 @@
+cat > .gitignore << EOL
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+pip-log.txt
+pip-delete-this-directory.txt
+.tox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.log
+.git
+.mypy_cache
+.pytest_cache
+.hypothesis
+.env
+logs.json
+users.json
+uploads/
+temp/
+*.db
+*.sqlite
+.DS_Store
+Thumbs.db
+
+# Test files that may contain API keys
+test_*.py
+debug_*.py
+*_test.py
+
+# Additional security
+*.key
+*.pem
+config.py
+EOL

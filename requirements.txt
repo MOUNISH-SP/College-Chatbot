@@ -1,0 +1,5 @@
+pinecone
+pypdf
+langchain
+openai
+tqdm
